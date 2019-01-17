@@ -60,13 +60,13 @@ scaler = StandardScaler(with_mean=False).fit(tfidf)
 vec_matrix = scaler.fit_transform(tfidf)
 
 #### Dimension Reduction####
-pca = TruncatedSVD(n_components=100)
+pca = TruncatedSVD(n_components=500)
 vec_matrix_pca = pca.fit_transform(vec_matrix)
 
-print(vec_matrix.todense())
+print(vec_matrix_pca.shape)
 # print(vec_matrix)
 # matrix = pd.DataFrame(vec_matrix.toarray())
-np.savetxt('matr.txt', vec_matrix.todense())
+np.savetxt('matr.txt', vec_matrix_pca,delimiter=' ')
 
 # np.savetxt('vec_matrix.txt', vec_matrix)
 
@@ -77,7 +77,7 @@ cluster_errors = []
 
 for num_clusters in cluster_range:
   clusters = KMeans( num_clusters )
-  clusters.fit( X_scaled )
+  clusters.fit( vec_matrix_pca )
   cluster_errors.append( clusters.inertia_ )
 
 clusters_df = pd.DataFrame( { "num_clusters":cluster_range, "cluster_errors": cluster_errors } )
@@ -90,7 +90,7 @@ plt.plot( clusters_df.num_clusters, clusters_df.cluster_errors, marker = "o" )
 plt.show()
 
 ##### Based on Elbow Analysis ,finding average silhouette_score for every cluster formation ####
-cluster_range = range( 2, 25) ## This range was taken based elbow analysis above
+cluster_range = range( 7, 15) ## This range was taken based elbow analysis above
 
 for n_cluster in cluster_range:
     kmeans = KMeans(n_clusters=n_cluster).fit(vec_matrix_pca)
@@ -99,7 +99,7 @@ for n_cluster in cluster_range:
     print("For n_clusters={}, The Silhouette Coefficient is {}".format(n_cluster, sil_coeff))
 
 
-num_clusters = 7 #Understood from silhouette_score above
+num_clusters = 10 #Understood from silhouette_score above
 km = KMeans(n_clusters=num_clusters)
 km.fit(vec_matrix_pca)
 clusters = km.labels_.tolist()
