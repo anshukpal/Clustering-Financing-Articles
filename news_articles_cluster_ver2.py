@@ -72,22 +72,22 @@ np.savetxt('matr.txt', vec_matrix.todense())
 
 #### Elbow Analysis #####
 
-# cluster_range = range( 1, 20 )
-# cluster_errors = []
+cluster_range = range( 1, 20 )
+cluster_errors = []
 
-# for num_clusters in cluster_range:
-#   clusters = KMeans( num_clusters )
-#   clusters.fit( X_scaled )
-#   cluster_errors.append( clusters.inertia_ )
+for num_clusters in cluster_range:
+  clusters = KMeans( num_clusters )
+  clusters.fit( X_scaled )
+  cluster_errors.append( clusters.inertia_ )
 
-# clusters_df = pd.DataFrame( { "num_clusters":cluster_range, "cluster_errors": cluster_errors } )
+clusters_df = pd.DataFrame( { "num_clusters":cluster_range, "cluster_errors": cluster_errors } )
 
-# print(clusters_df[0:10])
+print(clusters_df[0:10])
 
-# plt.figure(figsize=(12,6))
-# plt.plot( clusters_df.num_clusters, clusters_df.cluster_errors, marker = "o" )
+plt.figure(figsize=(12,6))
+plt.plot( clusters_df.num_clusters, clusters_df.cluster_errors, marker = "o" )
 
-# plt.show()
+plt.show()
 
 ##### Based on Elbow Analysis ,finding average silhouette_score for every cluster formation ####
 cluster_range = range( 2, 25) ## This range was taken based elbow analysis above
